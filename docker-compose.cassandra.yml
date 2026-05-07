@@ -1,0 +1,45 @@
+name: hw10-cassandra
+
+services:
+  cassandra:
+    image: cassandra:5.0.5
+    container_name: hw10-cassandra
+    hostname: cassandra
+    restart: unless-stopped
+    ports:
+      - "9042:9042"
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+      - ./cassandra/init.cql:/init/init.cql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "cqlsh localhost 9042 -e 'DESCRIBE KEYSPACES' > /dev/null 2>&1"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 60s
+    networks:
+      - hw10-stream-net
+
+  cassandra-init:
+    image: cassandra:5.0.5
+    container_name: hw10-cassandra-init
+    depends_on:
+      cassandra:
+        condition: service_healthy
+    restart: "no"
+    volumes:
+      - ./cassandra/init.cql:/init/init.cql:ro
+    entrypoint: ["/bin/bash", "-lc"]
+    command: >
+      "
+      cqlsh cassandra 9042 -f /init/init.cql
+      "
+    networks:
+      - hw10-stream-net
+
+volumes:
+  cassandra_data:
+
+networks:
+  hw10-stream-net:
+    external: true

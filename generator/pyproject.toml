@@ -1,0 +1,15 @@
+[project]
+name = "proc-event-streams"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "kafka-python-ng>=2.2.3",
+    "requests>=2.33.1",
+    "sseclient-py>=1.9.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
