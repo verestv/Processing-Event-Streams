@@ -118,4 +118,3 @@ SELECT * FROM page_creates LIMIT 20;
 
 `kafka_topics_output.png` - Kafka topic content(left side is unproccesed, right side is processed)
 `cassandra_data_hw10.png` Cassandra rows written by the pipeline
-```
